@@ -1,0 +1,8 @@
+pizza 23
+pulao 45
+biryani43 43
+chicken 0
+koftay 90
+biryani2 34
+koftay 67
+golgappy 34
