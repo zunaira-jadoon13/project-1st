@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iomanip>
 using namespace std;
 
 // Structure to store menu items
@@ -53,7 +54,7 @@ void viewMenu(const vector<MenuItem>& menu) {
 
     cout << "Menu:" << endl;
     for (int i = 0; i < menu.size(); ++i) { 
-        cout << menu[i].name << " - $" << menu[i].price << endl; 
+        cout << menu[i].name << " -Rs" << menu[i].price << endl; 
     }
 }
 
@@ -66,7 +67,7 @@ void searchMenu(const vector<MenuItem>& menu) {
     // Search for the item
     for (int i = 0; i < menu.size(); ++i) {
         if (menu[i].name == name) { 
-            cout << "Item found: " << menu[i].name << " - $" << menu[i].price << endl;
+            cout << "Item found: " << menu[i].name << " -Rs" << menu[i].price << endl;
             return; 
         }
     }
@@ -104,6 +105,54 @@ void removeMenuItem(vector<MenuItem>& menu) {
         }
     }
     cout << "Item not found.\n";
+}
+// Function to order items and generate a receipt
+void orderItems(const vector<MenuItem>& menu) {
+    if (menu.empty()) {
+        cout << "The menu is empty. Cannot place an order.\n";
+        return;
+    }
+
+    vector<MenuItem> order;
+    string name;
+    int quantity;
+    char choice;
+    float total = 0;
+
+    do {
+        cout << "Enter item name to order: ";
+        cin >> name;
+
+        bool found = false;
+        for (const auto& item : menu) {
+            if (item.name == name) {
+                cout << "Enter quantity: ";
+                cin >> quantity;
+                order.push_back({ item.name, item.price * quantity });
+                total += item.price * quantity;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            cout << "Item not found.\n";
+        }
+
+        cout << "Do you want to order another item? (y/n): ";
+        cin >> choice;
+    } while (choice == 'y' || choice == 'Y');
+
+    // Generate receipt
+    cout << "\nReceipt:\n";
+    cout << "\n";
+    cout << left << setw(20) << "Item" << right << setw(10) << "Price" << endl;
+    cout << "----------------------------------\n";
+    for (const auto& item : order) {
+        cout << left << setw(20) << item.name << right << "Rs" << setw(9) << fixed << setprecision(2) << item.price << endl;
+    }
+    cout << "----------------------------------\n";
+    cout << left << setw(20) << "Total" << right << "Rs" << setw(9) << fixed << setprecision(2) << total << endl;
 }
 
 #endif
